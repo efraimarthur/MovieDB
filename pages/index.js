@@ -1,28 +1,43 @@
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { Icon } from "@iconify/react";
+import Link from "next/link";
 import useFetch from "../Components/Fetcher";
+import Navbar from "../Components/Navbar";
+
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Icon } from "@iconify/react";
+import { Navigation, Thumbs, Pagination, Autoplay } from "swiper";
 
 // Import Swiper styles
 import "swiper/css";
-import Link from "next/link";
+import "swiper/css/navigation";
+import "swiper/css/thumbs";
+import "swiper/css/pagination";
 
-const Home = () => {
+export async function getServerSideProps() {
+  // Fetch data from external API
+  const res = await fetch(
+    `https://api.themoviedb.org/3/movie/popular?api_key=9d9e94b5b5a02a1ec80f8d011ce958c7&language=en-US&page=1`
+  );
+  const data = await res.json();
+  const result = await data.results;
+  // console.log(data);
+
+  // Pass data to the page via props
+  return { props: { result } };
+}
+
+const Home = ({ result }) => {
   const [datas, setDatas] = useState();
-  const [genres, setGenres] = useState();
   const [details, setDetails] = useState();
   const [selectedItem, setSelectedItem] = useState();
-  const [selectedGenre, setSelectedGenre] = useState();
-  const [overview, setOverview] = useState("");
+  const [dataServer, setDataServer] = useState();
+  // console.log(dataServer);
 
-  const [data] = useFetch(
-    "https://api.themoviedb.org/3/trending/all/week?api_key=9d9e94b5b5a02a1ec80f8d011ce958c7&language=en-US"
-  );
-  const [genre] = useFetch(
-    "https://api.themoviedb.org/3/genre/movie/list?api_key=9d9e94b5b5a02a1ec80f8d011ce958c7&language=en-US"
+  const [trending] = useFetch(
+    "https://api.themoviedb.org/3/trending/all/day?api_key=9d9e94b5b5a02a1ec80f8d011ce958c7&language=en-US"
   );
 
   const [detail] = useFetch(
@@ -30,53 +45,22 @@ const Home = () => {
   );
 
   const onItemClick = (item) => {
-    setSelectedItem(item);
-    console.log(item);
-
-    let genreId = [];
-    let genreName = [];
-
-    //seperate id and name
-    genres.map((g) => {
-      genreId.push(g.id), genreName.push(g.name);
-    });
-
-    //get index of specific array
-    let indexArr = [];
-    let getIndexArr = genreId.map((e, index) => {
-      if (item.genre_ids.includes(e)) {
-        indexArr.push(index);
-      }
-    });
-
-    //get name of index array
-    let genreNameArr = [];
-    let getGenreName = genreName.map((e, index) => {
-      if (indexArr.includes(index)) {
-        genreNameArr.push(e);
-      }
-    });
-    setSelectedGenre(genreNameArr);
+    //get id of selected item
+    setSelectedItem({ id: item.id });
   };
 
   useEffect(() => {
-    // selectedGenre && console.log(selectedGenre);
-
     //set data from fetch to state
-    data && setDatas(data.results);
+    trending && setDatas(trending.results);
 
-    //set genre from fetch to state
-    genre && setGenres(genre.genres);
-
-    if (selectedItem) {
-      let split = selectedItem.overview.split(".");
-      setOverview(split[0]);
+    //get detail data of item selected
+    if (detail) {
+      setDetails(detail);
+      console.log(details);
     }
 
-    //get detail data
-    detail && setDetails(detail);
-    console.log(details?.genres);
-  }, [data, genre, selectedGenre, selectedItem, detail]);
+    result && setDataServer(result);
+  }, [trending, selectedItem, detail, result]);
 
   return (
     <div className="">
@@ -87,10 +71,50 @@ const Home = () => {
       </Head>
       <div className="bg-teal-900">
         <main className="pb-[500px]">
-          <div className="w-[90%] text-white mx-auto min-h-screen pt-20">
+          <div className="relative min-h-screen mb-12 pt-16">
+            <div className="fixed z-50 w-full backdrop-blur-lg top-0">
+              <Navbar />
+            </div>
             <Swiper
+              slidesPerView={1}
+              spaceBetween={100}
+              loop={true}
+              // pagination={{
+              //   clickable: false,
+              // }}
+              autoplay={true}
+              navigation={false}
+              modules={[Pagination, Navigation, Autoplay]}
+              className="mySwiper"
+            >
+              {dataServer &&
+                dataServer.map((item, index) => (
+                  <div key={item}>
+                    <SwiperSlide>
+                      <div className="">
+                        <Image
+                          src={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
+                          width={2000}
+                          height={2000}
+                          alt="carousel img"
+                          // blurDataURL={`https://image.tmdb.org/t/p/w500${item.backdrop_path}`}
+                          className="object-cover"
+                        />
+                      </div>
+                    </SwiperSlide>
+                  </div>
+                ))}
+            </Swiper>
+          </div>
+          <div className="w-[90%] text-white mx-auto min-h-screen pt-10">
+            <p className="pb-5 font-semibold">Trending</p>
+            <Swiper
+              modules={[Navigation]}
               spaceBetween={9}
               slidesPerView={6}
+              navigation={true}
+              loop={true}
+              max
               // onSlideChange={() => console.log("slide change")}
               // onSwiper={(swiper) => console.log("heheh")}
             >
@@ -98,8 +122,8 @@ const Home = () => {
                 datas.map((item, index) => (
                   <div key={item.id}>
                     <SwiperSlide>
-                      <div className="flex flex-col items-center">
-                        <Link
+                      <div>
+                        <button
                           onClick={() => {
                             onItemClick(item);
                           }}
@@ -114,44 +138,62 @@ const Home = () => {
                             // blurDataURL={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
                             className="w-52 aspect-[1/1.5] rounded-xl focus:border-2"
                           />
-                        </Link>
+                        </button>
                       </div>
                     </SwiperSlide>
                   </div>
                 ))}
             </Swiper>
 
-            {selectedItem?.backdrop_path ? (
+            {details?.id ? (
               <div
                 className={`w-full relative mt-20 before:absolute before:inset-0 before:z-10 before:bg-gradient-to-r before:from-black rounded-lg before:rounded-lg`}
               >
                 <Image
-                  src={`https://image.tmdb.org/t/p/original${selectedItem.backdrop_path}`}
+                  src={`https://image.tmdb.org/t/p/original${
+                    details.backdrop_path || details.poster_path
+                  }`}
                   width={2000}
                   height={2000}
                   // fill
                   quality={30}
                   alt="img"
-                  blurDataURL={`https://image.tmdb.org/t/p/original${selectedItem.backdrop_path}`}
+                  blurDataURL={`https://image.tmdb.org/t/p/original${details.backdrop_path}`}
                   className="h-[75vh] aspect-video object-top object-cover rounded-lg relative"
                 />
                 <div className="absolute left-5 top-1/2 -translate-y-1/2 z-20 flex items-start flex-col">
                   <div className="text-xs text-teal-200 flex gap-5 ">
-                    <span>{selectedGenre[0]}</span>
-                    <span>{selectedGenre[1]}</span>
-                    <span>{selectedGenre[2]}</span>
-                    <span>{selectedGenre[3]}</span>
-                    <span>{selectedGenre[4]}</span>
-                    <span>{selectedGenre[5]}</span>
+                    <span>{details.genres[0].name}</span>
+                    <span>{details.genres[1]?.name}</span>
+                    <span>{details.genres[2]?.name}</span>
+                    <span>{details.genres[3]?.name}</span>
+                    <span>{details.genres[4]?.name}</span>
+                    <span>{details.genres[5]?.name}</span>
                   </div>
-                  <div className="text-2xl font-semibold">
-                    {selectedItem.title || selectedItem.name}
+                  <div className="text-2xl font-semibold mt-1">
+                    {details.original_title || details.name}
                   </div>
-                  <div className="w-[50%] text-sm mt-3">{overview}</div>
+                  <div className="flex items-center gap-5">
+                    <div className="text-sm text-yellow-400 flex items-center gap-1">
+                      <Icon
+                        icon="material-symbols:star-rate-half"
+                        className="text-lg"
+                      />
+                      {parseFloat(details.vote_average).toFixed(1)}
+                    </div>
+                    <div className="text-sm text-sky-200 flex items-center gap-1">
+                      {Math.floor(details.runtime / 60)}H {details.runtime % 60}
+                      M
+                      <Icon icon="entypo:hour-glass" className="" />
+                    </div>
+                  </div>
+                  <div className="w-[50%] text-sm mt-2">
+                    {details.overview.split(".")[0]}
+                  </div>
                 </div>
                 <button
-                  className="absolute z-30 top-0 right-0 font-bold hover:bg-rose-500 duration-200 flex items-center justify-center text-lg bg-rose-900 px-3 py-1"
-                  onClick={() => setSelectedItem(null)}
+                  className="absolute z-30 top-2 right-2 font-bold hover:bg-white duration-200 flex items-center justify-center text-lg border-2 rounded-full text-rose-600 border-slate-50"
+                  onClick={() => setDetails(null)}
                 >
                   <Icon icon="material-symbols:close-rounded" />
                 </button>
