@@ -34,6 +34,7 @@ const Home = ({ result }) => {
   const [details, setDetails] = useState();
   const [selectedItem, setSelectedItem] = useState();
   const [dataServer, setDataServer] = useState();
+  const [cast, setCast] = useState();
   // console.log(dataServer);
 
   const [trending] = useFetch(
@@ -44,23 +45,32 @@ const Home = ({ result }) => {
     `https://api.themoviedb.org/3/movie/${selectedItem?.id}?api_key=9d9e94b5b5a02a1ec80f8d011ce958c7&language=en-US`
   );
 
+  const [getCast] = useFetch(
+    `https://api.themoviedb.org/3/movie/${selectedItem?.id}/credits?api_key=9d9e94b5b5a02a1ec80f8d011ce958c7`
+  );
+
   const onItemClick = (item) => {
     //get id of selected item
     setSelectedItem({ id: item.id });
   };
 
   useEffect(() => {
-    //set data from fetch to state
+    //get data from trending
     trending && setDatas(trending.results);
 
-    //get detail data of item selected
+    //get detail data of selected item
     if (detail) {
       setDetails(detail);
-      console.log(details);
+      // console.log(details);
     }
 
+    //get cast of selected item
+    getCast && setCast(getCast.cast?.slice(0, 5));
+    // console.log(cast);
+
+    //get carousel serverside data
     result && setDataServer(result);
-  }, [trending, selectedItem, detail, result]);
+  }, [trending, selectedItem, detail, result, getCast]);
 
   return (
     <div className="">
@@ -69,15 +79,15 @@ const Home = ({ result }) => {
         <meta name="description" content="Movie DB by TMDB api" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="bg-teal-900">
-        <main className="pb-[500px]">
-          <div className="relative min-h-screen mb-12 pt-16">
+      <div className="bg-teal-900" style={{ scrollBehavior: "smooth" }}>
+        <main className="pb-[500px] scroll-smooth">
+          <div className="relative sm:min-h-screen pt-16 w-full">
             <div className="fixed z-50 w-full backdrop-blur-lg top-0">
               <Navbar />
             </div>
             <Swiper
               slidesPerView={1}
-              spaceBetween={100}
+              spaceBetween={30}
               loop={true}
               // pagination={{
               //   clickable: false,
@@ -90,23 +100,57 @@ const Home = ({ result }) => {
               {dataServer &&
                 dataServer.map((item, index) => (
                   <div key={item}>
+                    {/* {console.log(item.original_title)} */}
                     <SwiperSlide>
-                      <div className="">
+                      <div className="relative w-full h-full">
                         <Image
                           src={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
                           width={2000}
                           height={2000}
                           alt="carousel img"
                           // blurDataURL={`https://image.tmdb.org/t/p/w500${item.backdrop_path}`}
-                          className="object-cover"
+                          className="object-cover sm:h-screen"
                         />
+                        <div className="absolute right-0 top-0 text-white h-full w-[80vw] bg-gradient-to-l from-black flex justify-end items-center">
+                          <div className="text-end flex flex-col mr-8 gap-5">
+                            <div className="text-3xl font-semibold">
+                              {item.original_title}
+                            </div>
+                            <div className="w-96">{item.overview}</div>
+                            <div className="flex gap-2 justify-end mt-2">
+                              <Link
+                                className="bg-slate-50 bg-opacity-30 text-slate-50 rounded-sm px-5 py-2 flex items-center gap-1 font-semibold hover:opacity-60"
+                                onClick={() => {
+                                  onItemClick(item);
+                                }}
+                                href={"#testing"}
+                                scroll={true}
+                              >
+                                More Info
+                              </Link>
+                              <Link
+                                className="bg-slate-50 text-slate-900 rounded-sm px-5 py-2 flex items-center gap-1 font-semibold hover:opacity-60"
+                                onClick={() => {
+                                  onItemClick(item);
+                                }}
+                                href={"#testing"}
+                              >
+                                <Icon
+                                  icon="material-symbols:play-arrow"
+                                  className="text-2xl"
+                                />
+                                Play
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </SwiperSlide>
                   </div>
                 ))}
             </Swiper>
           </div>
-          <div className="w-[90%] text-white mx-auto min-h-screen pt-10">
+          <div className="w-[90%] text-white mx-auto min-h-screen pt-8">
             <p className="pb-5 font-semibold">Trending</p>
             <Swiper
               modules={[Navigation]}
@@ -114,7 +158,6 @@ const Home = ({ result }) => {
               slidesPerView={6}
               navigation={true}
               loop={true}
-              max
               // onSlideChange={() => console.log("slide change")}
               // onSwiper={(swiper) => console.log("heheh")}
             >
@@ -144,65 +187,94 @@ const Home = ({ result }) => {
                   </div>
                 ))}
             </Swiper>
-
-            {details?.id ? (
-              <div
-                className={`w-full relative mt-20 before:absolute before:inset-0 before:z-10 before:bg-gradient-to-r before:from-black rounded-lg before:rounded-lg`}
-              >
-                <Image
-                  src={`https://image.tmdb.org/t/p/original${
-                    details.backdrop_path || details.poster_path
-                  }`}
-                  width={2000}
-                  height={2000}
-                  // fill
-                  quality={30}
-                  alt="img"
-                  blurDataURL={`https://image.tmdb.org/t/p/original${details.backdrop_path}`}
-                  className="h-[75vh] aspect-video object-top object-cover rounded-lg relative"
-                />
-                <div className="absolute left-5 top-1/2 -translate-y-1/2 z-20 flex items-start flex-col">
-                  <div className="text-xs text-teal-200 flex gap-5 ">
-                    <span>{details.genres[0].name}</span>
-                    <span>{details.genres[1]?.name}</span>
-                    <span>{details.genres[2]?.name}</span>
-                    <span>{details.genres[3]?.name}</span>
-                    <span>{details.genres[4]?.name}</span>
-                    <span>{details.genres[5]?.name}</span>
-                  </div>
-                  <div className="text-2xl font-semibold mt-1">
-                    {details.original_title || details.name}
-                  </div>
-                  <div className="flex items-center gap-5">
-                    <div className="text-sm text-yellow-400 flex items-center gap-1">
-                      <Icon
-                        icon="material-symbols:star-rate-half"
-                        className="text-lg"
-                      />
-                      {parseFloat(details.vote_average).toFixed(1)}
-                    </div>
-                    <div className="text-sm text-sky-200 flex items-center gap-1">
-                      {Math.floor(details.runtime / 60)}H {details.runtime % 60}
-                      M
-                      <Icon icon="entypo:hour-glass" className="" />
-                    </div>
-                  </div>
-                  <div className="w-[50%] text-sm mt-2">
-                    {details.overview.split(".")[0]}
-                  </div>
-                </div>
-                <button
-                  className="absolute z-30 top-2 right-2 font-bold hover:bg-white duration-200 flex items-center justify-center text-lg border-2 rounded-full text-rose-600 border-slate-50"
-                  onClick={() => setDetails(null)}
+            <div id="detail">
+              {details?.id ? (
+                <div
+                  className={`w-full relative mt-5 before:absolute before:inset-0 before:z-10 before:bg-gradient-to-r before:from-black rounded-lg before:rounded-lg`}
                 >
-                  <Icon icon="material-symbols:close-rounded" />
-                </button>
-              </div>
-            ) : null}
+                  <Image
+                    src={`https://image.tmdb.org/t/p/original${
+                      details.backdrop_path || details.poster_path
+                    }`}
+                    width={2000}
+                    height={2000}
+                    // fill
+                    quality={30}
+                    alt="img"
+                    blurDataURL={`https://image.tmdb.org/t/p/original${details.backdrop_path}`}
+                    className="h-[75vh] aspect-video object-top object-cover rounded-lg relative"
+                  />
+                  <div className="absolute left-5 top-1/2 -translate-y-1/2 z-20 flex items-start flex-col">
+                    <div className="text-2xl font-semibold mt-1">
+                      {details.original_title || details.name}
+                    </div>
+                    <div className="text-[10px] sm:text-xs text-teal-200 flex gap-5 ">
+                      <span>{details.genres[0].name}</span>
+                      <span>{details.genres[1]?.name}</span>
+                      <span>{details.genres[2]?.name}</span>
+                      <span>{details.genres[3]?.name}</span>
+                      <span>{details.genres[4]?.name}</span>
+                      <span>{details.genres[5]?.name}</span>
+                      {/* <span>{details.genres.map((e) => e.name + "  ")}</span> */}
+                    </div>
+                    <div className="flex items-center gap-5 mt-2">
+                      <div className="text-xs sm:text-sm text-yellow-400 flex items-center gap-1">
+                        <Icon
+                          icon="material-symbols:star-rate-half"
+                          className="text-xs sm:text-lg"
+                        />
+                        {parseFloat(details.vote_average).toFixed(1)}
+                      </div>
+                      <div className="text-xs sm:text-sm text-sky-200 flex items-center gap-1">
+                        {Math.floor(details.runtime / 60)}H{" "}
+                        {details.runtime % 60}
+                        M
+                        <Icon icon="entypo:hour-glass" className="" />
+                      </div>
+                    </div>
+                    <div className="w-[50%] text-[10px] sm:text-sm my-2">
+                      {details.overview.split(".")[0]}
+                    </div>
+                    <div className="flex sm:gap-2 flex-wrap gap-2">
+                      {cast?.map((c) => (
+                        <div key={c.cast_id} className="sm:w-[100px] w-[80px]">
+                          <div className="w-full relative h-full">
+                            <Image
+                              src={`https://image.tmdb.org/t/p/w500${c.profile_path}`}
+                              alt="profile"
+                              width={100}
+                              height={1}
+                              className="rounded-md"
+                            />
+                            <div className="absolute text-[10px] sm:text-xs w-full flex flex-col items-center bottom-0 pb-1 sm:gap-1 bg-opacity-50 bg-slate-900">
+                              <div className="text-center">
+                                {c.original_name}
+                              </div>
+                              <div className="text-teal-300 font-semibold text-center">
+                                {c.character}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <button
+                    className="absolute z-30 top-2 right-2 font-bold hover:bg-white duration-200 flex items-center justify-center text-lg border-2 rounded-full text-rose-600 border-slate-50"
+                    onClick={() => setDetails(null)}
+                  >
+                    <Icon icon="material-symbols:close-rounded" />
+                  </button>
+                </div>
+              ) : null}
+            </div>
           </div>
         </main>
 
-        <footer className="py-20 flex justify-center items-center text-slate-50 text-xl bg-gradient-to-t from-teal-800 via-teal-800">
+        <footer
+          className="py-20 flex justify-center items-center text-slate-50 text-xl bg-gradient-to-t from-teal-800 via-teal-800"
+          id="testing"
+        >
           Movie DB by Arthur
         </footer>
       </div>
