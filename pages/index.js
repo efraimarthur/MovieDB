@@ -79,11 +79,10 @@ const Home = ({ result }) => {
         <meta name="description" content="Movie DB by TMDB api" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="bg-teal-900">
+      <div className="bg-teal-900 pt-16">
+        <Navbar />
         <main className="pb-[500px]">
-          <div className="relative sm:min-h-screen pt-16 w-full">
-            <Navbar />
-
+          <div className="sm:min-h-screen w-full">
             <Swiper
               slidesPerView={1}
               spaceBetween={30}
