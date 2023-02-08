@@ -2,7 +2,7 @@ import { Icon } from "@iconify/react";
 
 const Navbar = () => {
   return (
-    <div className="flex justify-around bg-teal-600 bg-opacity-20 py-3 text-white items-center">
+    <div className="flex justify-around bg-teal-600 bg-opacity-20 py-3 text-white items-center fixed top-0 z-50 w-full backdrop-blur-lg">
       <div className="font-bold text-xl">
         Movie<span className="text-teal-500 skew-x-12">Ku</span>DB
       </div>
