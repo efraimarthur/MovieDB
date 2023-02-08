@@ -68,7 +68,7 @@ const Home = ({ result }) => {
     getCast && setCast(getCast.cast?.slice(0, 5));
     // console.log(cast);
 
-    //get carousel serverside data
+    //get popular serverside data
     result && setDataServer(result);
   }, [trending, selectedItem, detail, result, getCast]);
 
@@ -79,8 +79,8 @@ const Home = ({ result }) => {
         <meta name="description" content="Movie DB by TMDB api" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="bg-teal-900" style={{ scrollBehavior: "smooth" }}>
-        <main className="pb-[500px] scroll-smooth">
+      <div className="bg-teal-900">
+        <main className="pb-[500px]">
           <div className="relative sm:min-h-screen pt-16 w-full">
             <div className="fixed z-50 w-full backdrop-blur-lg top-0">
               <Navbar />
@@ -119,21 +119,22 @@ const Home = ({ result }) => {
                             <div className="w-96">{item.overview}</div>
                             <div className="flex gap-2 justify-end mt-2">
                               <Link
-                                className="bg-slate-50 bg-opacity-30 text-slate-50 rounded-sm px-5 py-2 flex items-center gap-1 font-semibold hover:opacity-60"
+                                className="bg-slate-50 text-teal-900 rounded-sm px-5 py-2 flex items-center gap-1 font-semibold hover:opacity-60"
                                 onClick={() => {
                                   onItemClick(item);
                                 }}
-                                href={"#testing"}
-                                scroll={true}
+                                href={"#detail"}
+                                scroll={false}
                               >
                                 More Info
                               </Link>
                               <Link
-                                className="bg-slate-50 text-slate-900 rounded-sm px-5 py-2 flex items-center gap-1 font-semibold hover:opacity-60"
+                                className="bg-teal-900 text-slate-100 rounded-sm px-5 py-2 flex items-center gap-1 font-semibold hover:opacity-60 pl-1"
                                 onClick={() => {
                                   onItemClick(item);
                                 }}
-                                href={"#testing"}
+                                href={"#detail"}
+                                scroll={false}
                               >
                                 <Icon
                                   icon="material-symbols:play-arrow"
@@ -150,6 +151,7 @@ const Home = ({ result }) => {
                 ))}
             </Swiper>
           </div>
+
           <div className="w-[90%] text-white mx-auto min-h-screen pt-8">
             <p className="pb-5 font-semibold">Trending</p>
             <Swiper
@@ -163,34 +165,45 @@ const Home = ({ result }) => {
             >
               {datas &&
                 datas.map((item, index) => (
-                  <div key={item.id}>
+                  <div key={item.id} className="">
                     <SwiperSlide>
-                      <div>
-                        <button
-                          onClick={() => {
-                            onItemClick(item);
-                          }}
-                          className=":border-2"
-                          href={""}
-                        >
+                      <div className="relative before:absolute before:inset-0 before:z-20 hover:before:bg-slate-900 hover:before:opacity-60 group">
+                        <div>
                           <Image
-                            src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+                            src={
+                              `https://image.tmdb.org/t/p/w500${item.poster_path}` ||
+                              `https://image.tmdb.org/t/p/original${item.poster_path}`
+                            }
                             width={100}
                             height={100}
                             alt="img"
                             // blurDataURL={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
                             className="w-52 aspect-[1/1.5] rounded-xl focus:border-2"
                           />
-                        </button>
+                        </div>
+                        <Link
+                          className="absolute z-40 top-1/2 -translate-y-1/2 right-1/2 translate-x-1/2 group-hover:visible hover:text-teal-500 invisible hidden sm:block text-white"
+                          onClick={() => {
+                            onItemClick(item);
+                          }}
+                          href={"#detail"}
+                          scroll={false}
+                        >
+                          <Icon
+                            icon="ic:round-play-circle-outline"
+                            className="text-6xl"
+                          />
+                        </Link>
                       </div>
                     </SwiperSlide>
                   </div>
                 ))}
             </Swiper>
-            <div id="detail">
+
+            <div id="detail" className="scroll-mt-20">
               {details?.id ? (
                 <div
-                  className={`w-full relative mt-5 before:absolute before:inset-0 before:z-10 before:bg-gradient-to-r before:from-black rounded-lg before:rounded-lg`}
+                  className={`w-full relative mt-5 before:absolute before:inset-0 before:z-10 before:bg-gradient-to-r before:from-black hover:before:to-black hover:before:opacity-70 rounded-lg before:rounded-lg group`}
                 >
                   <Image
                     src={`https://image.tmdb.org/t/p/original${
@@ -260,10 +273,16 @@ const Home = ({ result }) => {
                     </div>
                   </div>
                   <button
-                    className="absolute z-30 top-2 right-2 font-bold hover:bg-white duration-200 flex items-center justify-center text-lg border-2 rounded-full text-rose-600 border-slate-50"
+                    className="absolute z-40 top-2 right-2 font-bold hover:bg-rose-500 duration-200 flex items-center justify-center text-lg border-2 rounded-full text-white border-slate-50"
                     onClick={() => setDetails(null)}
                   >
                     <Icon icon="material-symbols:close-rounded" />
+                  </button>
+                  <button className="absolute z-40 top-1/2 -translate-y-1/2 right-1/4 group-hover:visible invisible hover:text-teal-500 hidden sm:block">
+                    <Icon
+                      icon="ic:round-play-circle-outline"
+                      className="text-6xl"
+                    />
                   </button>
                 </div>
               ) : null}
@@ -273,7 +292,7 @@ const Home = ({ result }) => {
 
         <footer
           className="py-20 flex justify-center items-center text-slate-50 text-xl bg-gradient-to-t from-teal-800 via-teal-800"
-          id="testing"
+          id="footer"
         >
           Movie DB by Arthur
         </footer>
