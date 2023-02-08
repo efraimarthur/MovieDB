@@ -83,7 +83,27 @@ const Home = ({ result }) => {
         <main className="pb-[500px]">
           <div className="relative sm:min-h-screen pt-16 w-full">
             <div className="fixed z-50 w-full backdrop-blur-lg top-0">
-              <Navbar />
+              {/* <Navbar /> */}
+              <div className="flex justify-around bg-teal-600 bg-opacity-20 py-3 text-white items-center">
+                <div className="font-bold text-xl">
+                  Movie<span className="text-teal-500 skew-x-12">Ku</span>DB
+                </div>
+                <div className="flex items-center">
+                  <input
+                    type="search"
+                    className="bg-transparent border-b-2 border-red-400 w-44 text-white outline-none p-2"
+                  />
+                  <span>
+                    <Icon
+                      icon="material-symbols:search-rounded"
+                      hFlip={true}
+                      className="text-2xl"
+                    />
+                  </span>
+                </div>
+                <div>Account</div>
+              </div>
+              {/*  */}
             </div>
             <Swiper
               slidesPerView={1}
@@ -108,6 +128,7 @@ const Home = ({ result }) => {
                           width={2000}
                           height={2000}
                           alt="carousel img"
+                          loading="eager"
                           // blurDataURL={`https://image.tmdb.org/t/p/w500${item.backdrop_path}`}
                           className="object-cover sm:h-screen"
                         />

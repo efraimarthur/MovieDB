@@ -4,7 +4,7 @@ const Navbar = () => {
   return (
     <div className="flex justify-around bg-teal-600 bg-opacity-20 py-3 text-white items-center">
       <div className="font-bold text-xl">
-        MovieDB<span className="text-rose-500 skew-x-12">KU</span>
+        Movie<span className="text-teal-500 skew-x-12">Ku</span>DB
       </div>
       <div className="flex items-center">
         <input
