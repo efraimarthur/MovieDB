@@ -3,8 +3,8 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
-import useFetch from "../components/Fetcher";
-import Navbar from "../components/Navbar";
+import useFetch from "../Components/Fetcher";
+import Navbar from "../Components/Navbar";
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
