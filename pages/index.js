@@ -83,7 +83,7 @@ const Home = ({ result }) => {
         <main className="pb-[500px]">
           <div className="relative sm:min-h-screen pt-16 w-full">
             <div className="fixed z-50 w-full backdrop-blur-lg top-0">
-              <Navbar />
+              {/* <Navbar /> */}
             </div>
             <Swiper
               slidesPerView={1}
