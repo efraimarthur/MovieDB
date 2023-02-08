@@ -159,8 +159,8 @@ const Home = ({ result }) => {
               slidesPerView={6}
               navigation={true}
               loop={true}
-              // onSlideChange={() => console.log("slide change")}
-              // onSwiper={(swiper) => console.log("heheh")}
+              onSlideChange={() => console.log("slide change")}
+              onSwiper={(swiper) => console.log("heheh")}
             >
               {datas &&
                 datas.map((item, index) => (

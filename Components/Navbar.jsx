@@ -9,7 +9,7 @@ const Navbar = () => {
       <div className="flex items-center">
         <input
           type="search"
-          className="bg-transparent border-b-2 border-red-400 w-44 text-white outline-none p-2"
+          className="bg-transparent border-b-2 border-red-500 w-44 text-white outline-none p-2"
         />
         <span>
           <Icon
