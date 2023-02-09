@@ -109,6 +109,7 @@ const Home = ({ result }) => {
                           loading="eager"
                           // blurDataURL={`https://image.tmdb.org/t/p/w500${item.backdrop_path}`}
                           className="object-cover sm:h-screen"
+                          style={{ width: "auto", height: "auto" }}
                         />
                         <div className="absolute right-0 top-0 text-white h-full w-[80vw] bg-gradient-to-l from-black flex justify-end items-center">
                           <div className="text-end flex flex-col mr-8 gap-5">
@@ -159,8 +160,8 @@ const Home = ({ result }) => {
               slidesPerView={6}
               navigation={true}
               loop={true}
-              onSlideChange={() => console.log("slide change")}
-              onSwiper={(swiper) => console.log("heheh")}
+              // onSlideChange={() => console.log("slide change")}
+              // onSwiper={(swiper) => console.log("heheh")}
             >
               {datas &&
                 datas.map((item, index) => (
@@ -178,6 +179,7 @@ const Home = ({ result }) => {
                             alt="img"
                             // blurDataURL={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
                             className="w-52 aspect-[1/1.5] rounded-xl focus:border-2"
+                            style={{ width: "auto", height: "auto" }}
                           />
                         </div>
                         <Link
@@ -213,8 +215,9 @@ const Home = ({ result }) => {
                     // fill
                     quality={30}
                     alt="img"
-                    blurDataURL={`https://image.tmdb.org/t/p/original${details.backdrop_path}`}
+                    loading="eager"
                     className="h-[75vh] aspect-video object-top object-cover rounded-lg relative"
+                    style={{ width: "auto", height: "auto" }}
                   />
                   <div className="absolute left-5 top-1/2 -translate-y-1/2 z-20 flex items-start flex-col">
                     <div className="text-2xl font-semibold mt-1">
@@ -257,6 +260,7 @@ const Home = ({ result }) => {
                               width={100}
                               height={1}
                               className="rounded-md"
+                              style={{ width: "auto", height: "auto" }}
                             />
                             <div className="absolute text-[10px] sm:text-xs w-full flex flex-col items-center bottom-0 pb-1 sm:gap-1 bg-opacity-50 bg-slate-900">
                               <div className="text-center">
