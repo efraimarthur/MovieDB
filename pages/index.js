@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import useFetch from "../Components/Fetcher";
@@ -30,7 +30,6 @@ export async function getServerSideProps() {
 }
 
 const Home = ({ result }) => {
-  const [isPending, startTransition] = useTransition();
   const [trending, setTrending] = useState();
   const [details, setDetails] = useState();
   const [selectedItem, setSelectedItem] = useState();
@@ -75,9 +74,7 @@ const Home = ({ result }) => {
 
   //get data from child component (navbar)
   const dataFromInput = (dataInput) => {
-    startTransition(() => {
-      setData(dataInput?.results);
-    });
+    setData(dataInput?.results);
   };
 
   return (
@@ -90,7 +87,7 @@ const Home = ({ result }) => {
       <div className="bg-teal-900 pt-16">
         <Navbar data={dataFromInput} />
         <main className="pb-[500px]">
-          {data ? (
+          {data != "" ? (
             <div className="flex flex-wrap justify-center gap-5 py-5">
               {data?.map((e) => (
                 <div
@@ -117,7 +114,7 @@ const Home = ({ result }) => {
               ))}
             </div>
           ) : null}
-          {data ? null : (
+          {data == "" ? (
             <>
               <div className="sm:min-h-screen w-full">
                 <Swiper
@@ -327,7 +324,7 @@ const Home = ({ result }) => {
                 </div>
               </div>
             </>
-          )}
+          ) : null}
         </main>
 
         <footer
