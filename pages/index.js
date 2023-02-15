@@ -5,6 +5,7 @@ import { Icon } from "@iconify/react";
 import Link from "next/link";
 import useFetch from "../Components/Fetcher";
 import Navbar from "../Components/Navbar";
+import Footer from "../Components/Footer";
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -30,7 +31,8 @@ export async function getServerSideProps() {
 }
 
 const Home = ({ result }) => {
-  const [trending, setTrending] = useState();
+  const [trendingToday, setTrendingToday] = useState();
+  const [trendingWeek, setTrendingWeek] = useState();
   const [details, setDetails] = useState();
   const [selectedItem, setSelectedItem] = useState();
   const [dataServer, setDataServer] = useState();
@@ -38,8 +40,11 @@ const Home = ({ result }) => {
   const [data, setData] = useState();
   // console.log(dataServer);
 
-  const [getTrending] = useFetch(
+  const [getTrendingToday] = useFetch(
     "https://api.themoviedb.org/3/trending/all/day?api_key=9d9e94b5b5a02a1ec80f8d011ce958c7&language=en-US"
+  );
+  const [getTrendingWeek] = useFetch(
+    "https://api.themoviedb.org/3/trending/all/week?api_key=9d9e94b5b5a02a1ec80f8d011ce958c7&language=en-US"
   );
 
   const [getDetail] = useFetch(
@@ -55,9 +60,15 @@ const Home = ({ result }) => {
     setSelectedItem({ id: item.id });
   };
 
+  //get data from child component (navbar)
+  const dataFromInput = (dataInput) => {
+    setData(dataInput?.results);
+  };
+
   useEffect(() => {
     //get data from trending
-    getTrending && setTrending(getTrending.results);
+    getTrendingToday && setTrendingToday(getTrendingToday.results);
+    getTrendingWeek && setTrendingWeek(getTrendingWeek.results);
 
     //get detail data of selected item
     getDetail && setDetails(getDetail);
@@ -70,12 +81,15 @@ const Home = ({ result }) => {
     result && setDataServer(result);
 
     // console.log(data);
-  }, [getTrending, selectedItem, getDetail, result, getCast, data]);
-
-  //get data from child component (navbar)
-  const dataFromInput = (dataInput) => {
-    setData(dataInput?.results);
-  };
+  }, [
+    getTrendingToday,
+    getTrendingWeek,
+    selectedItem,
+    getDetail,
+    result,
+    getCast,
+    data,
+  ]);
 
   return (
     <div className="">
@@ -84,16 +98,13 @@ const Home = ({ result }) => {
         <meta name="description" content="Movie DB by TMDB api" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="bg-teal-900 pt-16">
+      <div className="bg-black/90 pt-16">
         <Navbar data={dataFromInput} />
         <main className="pb-[500px]">
           {data != "" ? (
             <div className="flex flex-wrap justify-center gap-5 py-5">
               {data?.map((e) => (
-                <div
-                  key={e.id}
-                  className="sm:basis-1/6 basis-1/3 flex bg-teal-800 shadow-lg rounded-md overflow-hidden"
-                >
+                <div key={e.id} className="sm:basis-1/6 basis-1/3 flex">
                   <div className="flex flex-col text-white ">
                     <Image
                       src={`https://image.tmdb.org/t/p/${"w500" || "original"}${
@@ -103,7 +114,7 @@ const Home = ({ result }) => {
                       width={500}
                       height={500}
                       quality={40}
-                      className="aspect-[1/1.5] w-full"
+                      className="aspect-[1/1.5] w-full rounded-2xl"
                       loading="eager"
                     />
                     <div className="w-full px-1 text-center text-sm text-slate-100 my-2">
@@ -185,7 +196,65 @@ const Home = ({ result }) => {
                 </Swiper>
               </div>
               <div className="w-[90%] text-white mx-auto min-h-screen pt-8">
-                <p className="pb-5 font-semibold">Trending</p>
+                <p
+                  className="pb-5 font-semibold scroll-m-20"
+                  id="trendingtoday"
+                >
+                  Trending Today
+                </p>
+                <Swiper
+                  modules={[Navigation, Autoplay]}
+                  spaceBetween={9}
+                  slidesPerView={6}
+                  navigation={true}
+                  loop={true}
+                  autoplay={true}
+                  // onSlideChange={() => console.log("slide change")}
+                  // onSwiper={(swiper) => console.log("heheh")}
+                >
+                  {trendingToday &&
+                    trendingToday.map((item, index) => (
+                      <div key={item.id} className="">
+                        <SwiperSlide>
+                          <div className="relative before:absolute before:inset-0 before:z-20 hover:before:bg-slate-900 hover:before:opacity-60 group before:rounded-xl">
+                            <div>
+                              <Image
+                                src={
+                                  `https://image.tmdb.org/t/p/w500${item.poster_path}` ||
+                                  `https://image.tmdb.org/t/p/original${item.poster_path}`
+                                }
+                                width={100}
+                                height={100}
+                                alt="img"
+                                // blurDataURL={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+                                className="w-52 aspect-[1/1.5] rounded-xl focus:border-2"
+                              />
+                            </div>
+                            <Link
+                              className="absolute z-40 top-1/2 -translate-y-1/2 right-1/2 translate-x-1/2 group-hover:visible hover:text-teal-500 invisible hidden sm:block text-white"
+                              onClick={() => {
+                                onItemClick(item);
+                              }}
+                              href={"#detail"}
+                              scroll={false}
+                            >
+                              <Icon
+                                icon="ic:round-play-circle-outline"
+                                className="text-6xl"
+                              />
+                            </Link>
+                          </div>
+                        </SwiperSlide>
+                      </div>
+                    ))}
+                </Swiper>
+
+                <p
+                  className="pb-5 mt-10 font-semibold scroll-m-20"
+                  id="trendingweek"
+                >
+                  Trending This Week
+                </p>
                 <Swiper
                   modules={[Navigation]}
                   spaceBetween={9}
@@ -195,8 +264,8 @@ const Home = ({ result }) => {
                   // onSlideChange={() => console.log("slide change")}
                   // onSwiper={(swiper) => console.log("heheh")}
                 >
-                  {trending &&
-                    trending.map((item, index) => (
+                  {trendingWeek &&
+                    trendingWeek.map((item, index) => (
                       <div key={item.id} className="">
                         <SwiperSlide>
                           <div className="relative before:absolute before:inset-0 before:z-20 hover:before:bg-slate-900 hover:before:opacity-60 group before:rounded-xl">
@@ -326,13 +395,7 @@ const Home = ({ result }) => {
             </>
           ) : null}
         </main>
-
-        <footer
-          className="py-20 flex justify-center items-center text-slate-50 text-xl bg-gradient-to-t from-teal-800 via-teal-800"
-          id="footer"
-        >
-          Movie DB by Arthur
-        </footer>
+        <Footer />
       </div>
     </div>
   );
