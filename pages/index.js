@@ -2,7 +2,6 @@ import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
-import Link from "next/link";
 import useFetch from "../Components/Fetcher";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
@@ -98,7 +97,7 @@ const Home = ({ result }) => {
         <meta name="description" content="Movie DB by TMDB api" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="bg-black/90 pt-16">
+      <div className="bg-black/90 md:pt-16">
         <Navbar data={dataFromInput} />
         <main className="pb-[500px]">
           {data != "" ? (
@@ -162,30 +161,30 @@ const Home = ({ result }) => {
                                 </div>
                                 <div className="w-96">{item.overview}</div>
                                 <div className="flex gap-2 justify-end mt-2">
-                                  <Link
+                                  <a
                                     className="bg-slate-50 text-teal-900 rounded-sm px-5 py-2 flex items-center gap-1 font-semibold hover:opacity-60"
                                     onClick={() => {
                                       onItemClick(item);
                                     }}
                                     href={"#detail"}
-                                    scroll={false}
+                                    // scroll={false}
                                   >
                                     More Info
-                                  </Link>
-                                  <Link
+                                  </a>
+                                  <a
                                     className="bg-teal-900 text-slate-100 rounded-sm px-5 py-2 flex items-center gap-1 font-semibold hover:opacity-60 pl-1"
                                     onClick={() => {
                                       onItemClick(item);
                                     }}
                                     href={"#detail"}
-                                    scroll={false}
+                                    // scroll={false}
                                   >
                                     <Icon
                                       icon="material-symbols:play-arrow"
                                       className="text-2xl"
                                     />
                                     Play
-                                  </Link>
+                                  </a>
                                 </div>
                               </div>
                             </div>
@@ -209,6 +208,7 @@ const Home = ({ result }) => {
                   navigation={true}
                   loop={true}
                   autoplay={true}
+
                   // onSlideChange={() => console.log("slide change")}
                   // onSwiper={(swiper) => console.log("heheh")}
                 >
@@ -216,8 +216,8 @@ const Home = ({ result }) => {
                     trendingToday.map((item, index) => (
                       <div key={item.id} className="">
                         <SwiperSlide>
-                          <div className="relative before:absolute before:inset-0 before:z-20 hover:before:bg-slate-900 hover:before:opacity-60 group before:rounded-xl">
-                            <div>
+                          <div className="relative group">
+                            <div className="relative before:absolute before:inset-0 before:z-20 hover:before:bg-slate-900 hover:before:bg-opacity-40 hover:before:backdrop-blur-sm before:rounded-xl before:transition-all before:duration-500">
                               <Image
                                 src={
                                   `https://image.tmdb.org/t/p/w500${item.poster_path}` ||
@@ -230,8 +230,8 @@ const Home = ({ result }) => {
                                 className="w-52 aspect-[1/1.5] rounded-xl focus:border-2"
                               />
                             </div>
-                            <Link
-                              className="absolute z-40 top-1/2 -translate-y-1/2 right-1/2 translate-x-1/2 group-hover:visible hover:text-teal-500 invisible hidden sm:block text-white"
+                            <a
+                              className="absolute top-1/2 -translate-y-1/2 right-1/2 translate-x-1/2 group-hover:visible duration-500 group-hover:scale-100 scale-125 invisible hidden sm:flex z-30 hover:backdrop-blur-none"
                               onClick={() => {
                                 onItemClick(item);
                               }}
@@ -240,9 +240,9 @@ const Home = ({ result }) => {
                             >
                               <Icon
                                 icon="ic:round-play-circle-outline"
-                                className="text-6xl"
+                                className="text-6xl z-50 hover:text-teal-300 duration-200 active:animate-ping"
                               />
-                            </Link>
+                            </a>
                           </div>
                         </SwiperSlide>
                       </div>
@@ -256,11 +256,13 @@ const Home = ({ result }) => {
                   Trending This Week
                 </p>
                 <Swiper
-                  modules={[Navigation]}
+                  modules={[Navigation, Autoplay]}
                   spaceBetween={9}
                   slidesPerView={6}
                   navigation={true}
                   loop={true}
+                  // autoplay={true}
+
                   // onSlideChange={() => console.log("slide change")}
                   // onSwiper={(swiper) => console.log("heheh")}
                 >
@@ -268,8 +270,8 @@ const Home = ({ result }) => {
                     trendingWeek.map((item, index) => (
                       <div key={item.id} className="">
                         <SwiperSlide>
-                          <div className="relative before:absolute before:inset-0 before:z-20 hover:before:bg-slate-900 hover:before:opacity-60 group before:rounded-xl">
-                            <div>
+                          <div className="relative group">
+                            <div className="relative before:absolute before:inset-0 before:z-20 hover:before:bg-slate-900 hover:before:bg-opacity-40 hover:before:backdrop-blur-sm before:rounded-xl before:transition-all before:duration-500">
                               <Image
                                 src={
                                   `https://image.tmdb.org/t/p/w500${item.poster_path}` ||
@@ -282,19 +284,19 @@ const Home = ({ result }) => {
                                 className="w-52 aspect-[1/1.5] rounded-xl focus:border-2"
                               />
                             </div>
-                            <Link
-                              className="absolute z-40 top-1/2 -translate-y-1/2 right-1/2 translate-x-1/2 group-hover:visible hover:text-teal-500 invisible hidden sm:block text-white"
+                            <a
+                              className="absolute top-1/2 -translate-y-1/2 right-1/2 translate-x-1/2 group-hover:visible duration-500 group-hover:scale-100 scale-125 invisible hidden sm:flex z-50 hover:backdrop-blur-none"
                               onClick={() => {
                                 onItemClick(item);
                               }}
                               href={"#detail"}
-                              scroll={false}
+                              // scroll={false}
                             >
                               <Icon
                                 icon="ic:round-play-circle-outline"
-                                className="text-6xl"
+                                className="text-6xl z-50 hover:text-teal-300 duration-200 active:animate-ping"
                               />
-                            </Link>
+                            </a>
                           </div>
                         </SwiperSlide>
                       </div>
@@ -382,7 +384,7 @@ const Home = ({ result }) => {
                       >
                         <Icon icon="material-symbols:close-rounded" />
                       </button>
-                      <button className="absolute z-40 top-1/2 -translate-y-1/2 right-1/4 group-hover:visible invisible hover:text-teal-500 hidden sm:block">
+                      <button className="absolute z-40 top-1/2 -translate-y-1/2 right-1/4 group-hover:visible invisible hover:text-teal-300 hidden sm:block">
                         <Icon
                           icon="ic:round-play-circle-outline"
                           className="text-6xl"
