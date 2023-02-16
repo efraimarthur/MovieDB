@@ -131,9 +131,9 @@ const Home = ({ result }) => {
                   slidesPerView={1}
                   spaceBetween={30}
                   loop={true}
-                  // pagination={{
-                  //   clickable: false,
-                  // }}
+                  pagination={{
+                    clickable: true,
+                  }}
                   autoplay={true}
                   navigation={false}
                   modules={[Pagination, Navigation, Autoplay]}
@@ -204,20 +204,39 @@ const Home = ({ result }) => {
                 <Swiper
                   modules={[Navigation, Autoplay]}
                   spaceBetween={9}
-                  slidesPerView={6}
-                  navigation={true}
+                  slidesPerView={3}
+                  // navigation={true}
                   loop={true}
                   autoplay={true}
-
                   // onSlideChange={() => console.log("slide change")}
                   // onSwiper={(swiper) => console.log("heheh")}
+                  breakpoints={{
+                    // when window width is >= 640px
+                    640: {
+                      width: 640,
+                      slidesPerView: 4,
+                    },
+                    // when window width is >= 768px
+                    768: {
+                      width: 768,
+                      slidesPerView: 4,
+                    },
+                    1024: {
+                      width: 1024,
+                      slidesPerView: 6,
+                    },
+                    1280: {
+                      width: 1280,
+                      slidesPerView: 7,
+                    },
+                  }}
                 >
                   {trendingToday &&
                     trendingToday.map((item, index) => (
                       <div key={item.id} className="">
                         <SwiperSlide>
                           <div className="relative group">
-                            <div className="relative before:absolute before:inset-0 before:z-20 hover:before:bg-slate-900 hover:before:bg-opacity-40 hover:before:backdrop-blur-sm before:rounded-xl before:transition-all before:duration-500">
+                            <div className="relative before:absolute before:inset-0 before:z-20 hover:before:bg-slate-900 hover:before:bg-opacity-40 hover:before:backdrop-blur-sm before:rounded-xl before:transition-all before:duration-500 overflow-hidden rounded-xl">
                               <Image
                                 src={
                                   `https://image.tmdb.org/t/p/w500${item.poster_path}` ||
@@ -227,7 +246,7 @@ const Home = ({ result }) => {
                                 height={100}
                                 alt="img"
                                 // blurDataURL={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
-                                className="w-52 aspect-[1/1.5] rounded-xl focus:border-2"
+                                className="w-52 aspect-[1/1.5] rounded-xl focus:border-2 group-hover:scale-125 duration-500"
                               />
                             </div>
                             <a
@@ -258,13 +277,34 @@ const Home = ({ result }) => {
                 <Swiper
                   modules={[Navigation, Autoplay]}
                   spaceBetween={9}
-                  slidesPerView={6}
-                  navigation={true}
+                  slidesPerView={3}
+                  // navigation={true}
                   loop={true}
                   // autoplay={true}
-
                   // onSlideChange={() => console.log("slide change")}
                   // onSwiper={(swiper) => console.log("heheh")}
+                  breakpoints={{
+                    // when window width is >= 640px
+                    640: {
+                      width: 640,
+                      slidesPerView: 4,
+                      navigation: true,
+                    },
+                    // when window width is >= 768px
+                    768: {
+                      width: 768,
+                      slidesPerView: 4,
+                    },
+                    1024: {
+                      width: 1024,
+                      slidesPerView: 6,
+                      navigation: false,
+                    },
+                    1280: {
+                      width: 1280,
+                      slidesPerView: 7,
+                    },
+                  }}
                 >
                   {trendingWeek &&
                     trendingWeek.map((item, index) => (

@@ -240,7 +240,7 @@ const Navbar = ({ data }) => {
       )}
       {toggleMenu && (
         <div className="text-slate-200/80 relative">
-          <div className="h-[70vh] absolute bg-black/95 z-30 top-0 w-full text-lg">
+          <div className="h-[70vh] absolute bg-black/95 backdrop-blur-sm z-30 top-0 w-full text-lg">
             <div className="border-b w-full p-5 border-slate-500">
               <span className="text-2xl flex items-center gap-3">
                 <Icon
