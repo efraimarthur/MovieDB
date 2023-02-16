@@ -54,7 +54,7 @@ const Navbar = ({ data }) => {
             onClick={() => setMovieInput("")}
           >
             Movie
-            <span className="text-teal-500 skew-x-12 group-hover:text-white/90 transition-all">
+            <span className="text-teal-500 group-hover:text-white/90 transition-all">
               Ku
             </span>
           </Link>
@@ -71,7 +71,7 @@ const Navbar = ({ data }) => {
                 Trending{" "}
                 <Icon icon="ic:round-arrow-drop-down" className="text-2xl" />
               </span>
-              <div className="absolute w-52 py-5 group-hover:mt-5 transition-all duration-300 text-start bg-black/80 p-2 opacity-0 group-hover:opacity-100 flex flex-col gap-3 text-white/90">
+              <div className="absolute w-52 py-5 group-hover:mt-5 transition-all group-hover:duration-200 text-start bg-black/80 p-2 invisible group-hover:visible flex flex-col gap-3 text-white/90">
                 <a
                   onMouseEnter={() => setMovieInput("")}
                   // onClick={() => setMovieInput("")}
@@ -107,7 +107,7 @@ const Navbar = ({ data }) => {
                 Movies
                 <Icon icon="ic:round-arrow-drop-down" className="text-2xl" />
               </span>
-              <div className="group-hover:mt-5 py-5 absolute w-52 text-start bg-black/90 p-2 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col gap-3 text-white/90">
+              <div className="group-hover:mt-5 py-5 absolute w-52 text-start bg-black/90 p-2 invisible group-hover:visible transition-all group-hover:duration-200 flex flex-col gap-3 text-white/90">
                 <a
                   // onClick={() => setMovieInput("")}
                   onMouseEnter={() => setMovieInput("")}
@@ -276,85 +276,6 @@ const Navbar = ({ data }) => {
             </div>
           </div>
         </div>
-        // <div className="gap-10 items-center h-[50vh] bg-opacity-10 text-slate-100">
-        //   <div className="flex gap-10 h-full flex-col">
-        //     <button
-        //       href={""}
-        //       className="relative h-full group hover:text-teal-500"
-        //     >
-        //       <span className="flex items-center gap-2">
-        //         <Icon
-        //           icon="fluent:arrow-trending-lines-20-filled"
-        //           className="text-2xl"
-        //         />
-        //         Trending{" "}
-        //         <Icon icon="ic:round-arrow-drop-down" className="text-2xl" />
-        //       </span>
-        //       <div className="absolute w-52 py-5 group-hover:mt-5 transition-all duration-300 text-start bg-black/80 p-2 opacity-0 group-hover:opacity-100 flex flex-col gap-3 text-white/90">
-        //         <a
-        //           onMouseEnter={() => setMovieInput("")}
-        //           // onClick={() => setMovieInput("")}
-        //           href="#trendingtoday"
-        //           className="hover:text-teal-500 hover:pl-2 transition-all"
-        //         >
-        //           <Icon
-        //             icon="material-symbols:play-arrow"
-        //             className="inline mr-2"
-        //           />
-        //           Today
-        //         </a>
-        //         <a
-        //           // onClick={() => setMovieInput("")}
-        //           onMouseEnter={() => setMovieInput("")}
-        //           href="#trendingweek"
-        //           className="hover:text-teal-500 hover:pl-2 transition-all"
-        //         >
-        //           <Icon
-        //             icon="material-symbols:play-arrow"
-        //             className="inline mr-2"
-        //           />
-        //           This Week
-        //         </a>
-        //       </div>
-        //     </button>
-        //     <button
-        //       href={""}
-        //       className="group relative h-full hover:text-teal-500"
-        //     >
-        //       <span className="flex items-center gap-2">
-        //         <Icon icon="mdi:video-film" />
-        //         Movies
-        //         <Icon icon="ic:round-arrow-drop-down" className="text-2xl" />
-        //       </span>
-        //       <div className="group-hover:mt-5 py-5 absolute w-52 text-start bg-black/90 p-2 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col gap-3 text-white/90">
-        //         <a
-        //           // onClick={() => setMovieInput("")}
-        //           onMouseEnter={() => setMovieInput("")}
-        //           href="#trending"
-        //           className="hover:text-teal-500 hover:pl-2 transition-all"
-        //         >
-        //           <Icon
-        //             icon="material-symbols:play-arrow"
-        //             className="inline mr-2"
-        //           />
-        //           asd
-        //         </a>
-        //         <a
-        //           // onClick={() => setMovieInput("")}
-        //           onMouseEnter={() => setMovieInput("")}
-        //           href="#trending"
-        //           className="hover:text-teal-500 hover:pl-2 transition-all"
-        //         >
-        //           <Icon
-        //             icon="material-symbols:play-arrow"
-        //             className="inline mr-2"
-        //           />
-        //           123
-        //         </a>
-        //       </div>
-        //     </button>
-        //   </div>
-        // </div>
       )}
     </>
   );

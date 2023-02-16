@@ -195,78 +195,81 @@ const Home = ({ result }) => {
                 </Swiper>
               </div>
               <div className="w-[90%] text-white mx-auto min-h-screen pt-8">
-                <p
-                  className="pb-5 font-semibold scroll-m-20"
-                  id="trendingtoday"
-                >
-                  Trending Today
-                </p>
-                <Swiper
-                  modules={[Navigation, Autoplay]}
-                  spaceBetween={9}
-                  slidesPerView={3}
-                  // navigation={true}
-                  loop={true}
-                  autoplay={true}
-                  // onSlideChange={() => console.log("slide change")}
-                  // onSwiper={(swiper) => console.log("heheh")}
-                  breakpoints={{
-                    // when window width is >= 640px
-                    640: {
-                      width: 640,
-                      slidesPerView: 4,
-                    },
-                    // when window width is >= 768px
-                    768: {
-                      width: 768,
-                      slidesPerView: 4,
-                    },
-                    1024: {
-                      width: 1024,
-                      slidesPerView: 6,
-                    },
-                    1280: {
-                      width: 1280,
-                      slidesPerView: 7,
-                    },
-                  }}
-                >
-                  {trendingToday &&
-                    trendingToday.map((item, index) => (
-                      <div key={item.id} className="">
-                        <SwiperSlide>
-                          <div className="relative group">
-                            <div className="relative before:absolute before:inset-0 before:z-20 hover:before:bg-slate-900 hover:before:bg-opacity-40 hover:before:backdrop-blur-sm before:rounded-xl before:transition-all before:duration-500 overflow-hidden rounded-xl">
-                              <Image
-                                src={
-                                  `https://image.tmdb.org/t/p/w500${item.poster_path}` ||
-                                  `https://image.tmdb.org/t/p/original${item.poster_path}`
-                                }
-                                width={100}
-                                height={100}
-                                alt="img"
-                                // blurDataURL={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
-                                className="w-52 aspect-[1/1.5] rounded-xl focus:border-2 group-hover:scale-125 duration-500"
-                              />
+                <div className="border-b pb-5 border-slate-600/50">
+                  <p
+                    className="pb-5 font-semibold scroll-m-20"
+                    id="trendingtoday"
+                  >
+                    Trending Today
+                  </p>
+                  <Swiper
+                    modules={[Navigation, Autoplay]}
+                    spaceBetween={9}
+                    slidesPerView={3}
+                    // navigation={true}
+                    loop={true}
+                    autoplay={true}
+                    // onSlideChange={() => console.log("slide change")}
+                    // onSwiper={(swiper) => console.log("heheh")}
+                    breakpoints={{
+                      // when window width is >= 640px
+                      640: {
+                        width: 640,
+                        slidesPerView: 4,
+                      },
+                      // when window width is >= 768px
+                      768: {
+                        width: 768,
+                        slidesPerView: 4,
+                      },
+                      1024: {
+                        width: 1024,
+                        slidesPerView: 6,
+                      },
+                      1280: {
+                        width: 1280,
+                        slidesPerView: 7,
+                      },
+                    }}
+                  >
+                    {trendingToday &&
+                      trendingToday.map((item, index) => (
+                        <div key={item.id} className="">
+                          <SwiperSlide>
+                            <div className="relative group">
+                              <div className="relative before:absolute before:inset-0 before:z-20 hover:before:bg-slate-900 hover:before:bg-opacity-40 hover:before:backdrop-blur-sm before:rounded-xl before:transition-all before:duration-500 overflow-hidden rounded-xl">
+                                <Image
+                                  src={
+                                    `https://image.tmdb.org/t/p/w500${item.poster_path}` ||
+                                    `https://image.tmdb.org/t/p/original${item.poster_path}`
+                                  }
+                                  width={100}
+                                  height={100}
+                                  alt="img"
+                                  // blurDataURL={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+                                  className="w-52 aspect-[1/1.5] rounded-xl focus:border-2 group-hover:scale-125 duration-500"
+                                />
+                              </div>
+                              <a
+                                className="absolute top-1/2 -translate-y-1/2 right-1/2 translate-x-1/2 group-hover:visible duration-500 group-hover:scale-100 scale-125 invisible hidden sm:flex z-30 hover:backdrop-blur-none"
+                                onClick={() => {
+                                  onItemClick(item);
+                                }}
+                                href={"#detail"}
+                                scroll={false}
+                              >
+                                <Icon
+                                  icon="ic:round-play-circle-outline"
+                                  className="text-6xl z-50 hover:text-teal-300 duration-200 active:animate-ping"
+                                />
+                              </a>
+                              <p>{item.title || item.original_title}</p>
                             </div>
-                            <a
-                              className="absolute top-1/2 -translate-y-1/2 right-1/2 translate-x-1/2 group-hover:visible duration-500 group-hover:scale-100 scale-125 invisible hidden sm:flex z-30 hover:backdrop-blur-none"
-                              onClick={() => {
-                                onItemClick(item);
-                              }}
-                              href={"#detail"}
-                              scroll={false}
-                            >
-                              <Icon
-                                icon="ic:round-play-circle-outline"
-                                className="text-6xl z-50 hover:text-teal-300 duration-200 active:animate-ping"
-                              />
-                            </a>
-                          </div>
-                        </SwiperSlide>
-                      </div>
-                    ))}
-                </Swiper>
+                          </SwiperSlide>
+                        </div>
+                      ))}
+                  </Swiper>
+                </div>
 
                 <p
                   className="pb-5 mt-10 font-semibold scroll-m-20"
